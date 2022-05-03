@@ -1,5 +1,5 @@
 import json
-
+import random
 from PIL import Image
 import base64
 import smtplib
@@ -10,7 +10,7 @@ from email.header import Header
 # img = open("temp_watermark.jpg", 'rb')
 # res = base64.b64encode(img.read())
 # print(res)
-# img = Image.open("./img/wpeng.jpg.jpg")
+# img = Image.open("./img/wpeng0.jpg.jpg")
 # img.show()
 
 # mail_host = 'smtp.qq.com'
@@ -33,10 +33,10 @@ from email.header import Header
 # smtpObj.sendmail(sender, receivers, message.as_string())
 # print("邮件发送成功")
 
-path = "config.json"
-with open(path, 'r') as f:
-    data = json.load(f)
-for i in data:
-    print(i['personId'])
-
-
+# path = "config.json"
+# with open(path, 'r') as f:
+#     data = json.load(f)
+# for i in data:
+#     print(i['personId'])
+var = random.randint(0, 10)
+print(var)

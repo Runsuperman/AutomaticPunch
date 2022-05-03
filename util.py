@@ -4,17 +4,19 @@ import base64
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
+import random
 
 
 # 图片加水印
-def water_mark(day, ms, address):
+def water_mark(day, ms, address, name, code):
     ttf = 'DroidSansFallback-Regular.ttf'
     # t = time.localtime()
     # print(time)
     # d = str('%02d' % t.tm_hour) + ':' + str('%02d' % t.tm_min) + ':' + str('%02d' % t.tm_sec)
     # y = str(t.tm_year) + "-" + str('%02d' % t.tm_mon) + "-" + str('%02d' % t.tm_mday)
     # d = "15:39:00"
-    img = Image.open("./img/wpeng.jpg")
+    i_random = random.randint(0, 1)
+    img = Image.open("./img/" + name + "/wpeng" + str(i_random) + ".jpg")
     draw = ImageDraw.Draw(img, "RGBA")
     # 设置字体
     font = ImageFont.truetype(ttf, 14)
@@ -29,9 +31,9 @@ def water_mark(day, ms, address):
     r, g, b, a = icon.split()
     img.paste(icon, (18, 50), mask=a)
     draw.text((icon.width + 20, 52), address, font=font)
-    draw.text((1180, 20), "1151610", font=font)
+    draw.text((1180, 20), code, font=font)
     # img.show()
-    img.save('./img/temp_watermark.jpg')
+    img.save("./img/" + name + "/temp_watermark.jpg")
     return imgToBase64()
 
 

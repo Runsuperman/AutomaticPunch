@@ -18,14 +18,16 @@ if __name__ == '__main__':
     for i in data:
         personId = i['personId']
         email_addr = i['email']
+        name = i['name']
+        code = i['code']
         if dayType == '非工作日':
             util.send_email("非工作日，今天不用打卡呦", email_addr)
         else:
-            imgBase64 = util.water_mark(day, ms, address)
+            imgBase64 = util.water_mark(day, ms, address, name, code)
             # print(res)
             imageKey = request.submit(personId, day+' '+ms, address)
             update_status = request.upload_img(imgBase64, imageKey, personId)
             if json.loads(update_status)['data'].__eq__("success"):
-                util.send_email(i['name'] + "打卡成功，开启打工人新的一天", email_addr)
+                util.send_email(name + "打卡成功，开启打工人新的一天", email_addr)
             else:
-                util.send_email(i['name'] + "自动打卡失败", email_addr)
+                util.send_email(name + "自动打卡失败", email_addr)
