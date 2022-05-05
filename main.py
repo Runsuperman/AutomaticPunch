@@ -1,9 +1,11 @@
+import schedule
 import request
 import util
 import time
 import json
 
-if __name__ == '__main__':
+
+def punch_job():
     address = '浙江省杭州市西湖区蒋村街道文一西路757正绿城西溪国际'
     t = time.localtime()
     # print(time)
@@ -12,11 +14,13 @@ if __name__ == '__main__':
     ddd = str(t.tm_year) + str('%02d' % t.tm_mon) + str('%02d' % t.tm_mday)
     # print(ddd)
     dayType = util.holiday(str(t.tm_year) + str('%02d' % t.tm_mon) + str('%02d' % t.tm_mday))
-    json_path = './config.json'
+    # dayType = "工作日"
+    json_path = "config.json"
     with open(json_path, 'r') as f:
         data = json.load(f)
     for i in data:
         personId = i['personId']
+        print(personId)
         email_addr = i['email']
         name = i['name']
         code = i['code']
@@ -25,9 +29,25 @@ if __name__ == '__main__':
         else:
             imgBase64 = util.water_mark(day, ms, address, name, code)
             # print(res)
-            imageKey = request.submit(personId, day+' '+ms, address)
+            imageKey = request.submit(personId, day + ' ' + ms, address)
+            print("imageKey:", imageKey)
             update_status = request.upload_img(imgBase64, imageKey, personId)
             if json.loads(update_status)['data'].__eq__("success"):
                 util.send_email(name + "打卡成功，开启打工人新的一天", email_addr)
             else:
                 util.send_email(name + "自动打卡失败", email_addr)
+
+
+# dispatch = BlockingScheduler(timezone='Asia/Shanghai')
+# # dispatch.add_job(punch_job, "cron", hour=20, minute=13, second=2)
+# dispatch.add_job(punch_job, "interval ", second=2)
+# # dispatch.add_job(punch_job, "cron", hour=18, minute=random.randint(10, 59), second=2)
+# print("开始定时任务")
+# dispatch.start()
+
+if __name__ == '__main__':
+    schedule.every().day.at("08:15").do(punch_job)
+    schedule.every().day.at("19:45").do(punch_job)
+    while True:
+        schedule.run_pending()   # 运行所有可以运行的任务
+        time.sleep(1)
