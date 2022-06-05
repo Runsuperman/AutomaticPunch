@@ -58,8 +58,10 @@ def gps_info(personId):
         ],
         "locationFlag": 1
     }
+    print(params)
     res = requests.post(url, json=params)
     data = json.loads(res.text)['data']
+    print(data)
     info = {
         "longitude": longitude,
         "latitude": latitude,

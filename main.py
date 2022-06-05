@@ -1,12 +1,16 @@
-import schedule
+import json
+import random
+import time
+
+import schedule as schedule
+
 import request
 import util
-import time
-import json
 
 
+# if __name__ == '__main__':
 def punch_job():
-    address = '浙江省杭州市西湖区蒋村街道文一西路757正绿城西溪国际'
+    address = '浙江省杭州市西湖区文一西路769'
     t = time.localtime()
     # print(time)
     day = str(t.tm_year) + "-" + str('%02d' % t.tm_mon) + "-" + str('%02d' % t.tm_mday)
@@ -15,7 +19,7 @@ def punch_job():
     # print(ddd)
     dayType = util.holiday(str(t.tm_year) + str('%02d' % t.tm_mon) + str('%02d' % t.tm_mday))
     # dayType = "工作日"
-    json_path = "config.json"
+    json_path = "./config.json"
     with open(json_path, 'r') as f:
         data = json.load(f)
     for i in data:
@@ -37,7 +41,6 @@ def punch_job():
             else:
                 util.send_email(name + "自动打卡失败", email_addr)
 
-
 # dispatch = BlockingScheduler(timezone='Asia/Shanghai')
 # # dispatch.add_job(punch_job, "cron", hour=20, minute=13, second=2)
 # dispatch.add_job(punch_job, "interval ", second=2)
@@ -45,9 +48,13 @@ def punch_job():
 # print("开始定时任务")
 # dispatch.start()
 
+
 if __name__ == '__main__':
-    schedule.every().day.at("08:15").do(punch_job)
-    schedule.every().day.at("19:45").do(punch_job)
+    print("开始定时任务")
+    m = str(random.randint(10, 40))
+    s = str(random.randint(10, 59))
+    schedule.every().day.at("08:" + m + ":" + s).do(punch_job)
+    schedule.every().day.at("18:" + m + ":" + s).do(punch_job)
     while True:
         schedule.run_pending()   # 运行所有可以运行的任务
         time.sleep(1)

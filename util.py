@@ -15,7 +15,7 @@ def water_mark(day, ms, address, name, code):
     # d = str('%02d' % t.tm_hour) + ':' + str('%02d' % t.tm_min) + ':' + str('%02d' % t.tm_sec)
     # y = str(t.tm_year) + "-" + str('%02d' % t.tm_mon) + "-" + str('%02d' % t.tm_mday)
     # d = "15:39:00"
-    i_random = random.randint(0, 1)
+    i_random = random.randint(0, 6)
     img = Image.open("./img/" + name + "/wpeng" + str(i_random) + ".jpg")
     draw = ImageDraw.Draw(img, "RGBA")
     # 设置字体
@@ -31,16 +31,16 @@ def water_mark(day, ms, address, name, code):
     r, g, b, a = icon.split()
     img.paste(icon, (18, 50), mask=a)
     draw.text((icon.width + 20, 52), address, font=font)
-    draw.text((1180, 20), code, font=font)
+    draw.text((420, 20), code, font=font)
     # img.show()
     temp_path = "./img/" + name + "/temp_watermark.jpg"
     img.save(temp_path)
     return imgToBase64(temp_path)
 
 # 修改图片大小
-# img = Image.open("./img/wpeng/wpeng1.jpg")
-# new_img = img.resize((810, 1080))
-# new_img.save("./img/wpeng/wpeng1.jpg")
+# img = Image.open("./img/wpeng/wpeng6.jpg")
+# new_img = img.resize((500, 1080))
+# new_img.save("./img/wpeng/wpeng6.jpg")
 
 # 修改icon大小
 # icon = Image.open('./img/position.png')
@@ -63,7 +63,7 @@ def imgToBase64(temp_path):
 
 
 def holiday(date):
-    url = 'https://api.apihubs.cn/holiday/get?field=workday,holiday,date&date={}&cn=1&size=31'
+    url = 'https://api.apihubs.cn/holiday/get'
     params = {
         'field': 'workday,holiday,date',
         'date': date,
